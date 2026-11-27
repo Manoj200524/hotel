@@ -1,0 +1,1867 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Hotel Management System</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    background: #f3f6fb;
+    color: #1e293b;
+}
+
+header {
+    background: linear-gradient(135deg, #0f172a, #2563eb);
+    color: white;
+    padding: 25px;
+    text-align: center;
+}
+
+header h1 {
+    margin: 0;
+}
+
+header p {
+    margin-bottom: 0;
+    color: #dbeafe;
+}
+
+nav {
+    background: #ffffff;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 10px;
+    padding: 15px;
+    box-shadow: 0 2px 10px #0001;
+}
+
+nav button {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 10px 16px;
+    border-radius: 8px;
+    cursor: pointer;
+}
+
+nav button:hover {
+    background: #1d4ed8;
+}
+
+.container {
+    max-width: 1100px;
+    margin: auto;
+    padding: 25px;
+}
+
+.section {
+    display: none;
+}
+
+.section.active {
+    display: block;
+}
+
+.card {
+    background: white;
+    padding: 25px;
+    border-radius: 15px;
+    box-shadow: 0 4px 15px #0000000a;
+    margin-bottom: 20px;
+}
+
+h2 {
+    color: #1d4ed8;
+}
+
+input, select, textarea {
+    width: 100%;
+    padding: 12px;
+    margin: 8px 0 15px;
+    border: 1px solid #cbd5e1;
+    border-radius: 8px;
+    font-size: 15px;
+}
+
+button.action {
+    background: #2563eb;
+    color: white;
+    border: none;
+    padding: 12px 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin: 5px;
+}
+
+button.action:hover {
+    background: #1d4ed8;
+}
+
+button.danger {
+    background: #dc2626;
+}
+
+button.success {
+    background: #16a34a;
+}
+
+button.secondary {
+    background: #475569;
+}
+
+.room-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-top: 20px;
+}
+
+.room-card {
+    border: 1px solid #dbeafe;
+    background: #f8fbff;
+    padding: 20px;
+    border-radius: 12px;
+}
+
+.room-card h3 {
+    color: #1d4ed8;
+}
+
+.price {
+    font-weight: bold;
+    color: #15803d;
+}
+
+.message {
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+    background: #eff6ff;
+    color: #1d4ed8;
+    word-break: break-word;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: white;
+}
+
+th, td {
+    border: 1px solid #e2e8f0;
+    padding: 10px;
+    text-align: left;
+}
+
+th {
+    background: #2563eb;
+    color: white;
+}
+
+.table-wrap {
+    overflow-x: auto;
+}
+
+.stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 15px;
+}
+
+.stat-card {
+    background: #eff6ff;
+    padding: 20px;
+    border-radius: 12px;
+    text-align: center;
+}
+
+.stat-card h3 {
+    color: #2563eb;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #64748b;
+}
+
+.hidden {
+    display: none !important;
+}
+
+@media(max-width:600px) {
+    .container {
+        padding: 12px;
+    }
+
+    .card {
+        padding: 15px;
+    }
+
+    nav button {
+        font-size: 13px;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<header>
+    <h1>Hotel Management System</h1>
+    <p>Online Room Booking and Management</p>
+</header>
+
+<nav>
+    <button onclick="showSection('home')">Home</button>
+    <button onclick="showSection('booking')">Book Room</button>
+    <button onclick="showSection('history')">Booking History</button>
+    <button onclick="showSection('customer')">Customer Login</button>
+    <button onclick="showSection('staff')">Staff/Admin Login</button>
+    <button onclick="logout()">Logout</button>
+</nav>
+
+<div class="container">
+
+<!-- HOME -->
+
+<section id="home" class="section active">
+
+    <div class="card">
+        <h2>Welcome to Our Hotel</h2>
+        <p>
+            Experience comfortable rooms, excellent service
+            and convenient online booking.
+        </p>
+
+        <button class="action"
+            onclick="showSection('booking')">
+            Book Your Room
+        </button>
+    </div>
+
+    <div class="card">
+        <h2>Our Room Types</h2>
+
+        <div class="room-grid">
+
+            <div class="room-card">
+                <h3>Single Room</h3>
+                <p>Comfortable room for one guest.</p>
+                <p class="price">₹1,500 / night</p>
+            </div>
+
+            <div class="room-card">
+                <h3>Double Room</h3>
+                <p>Room for two guests.</p>
+                <p class="price">₹2,500 / night</p>
+            </div>
+
+            <div class="room-card">
+                <h3>Deluxe Room</h3>
+                <p>Premium room with extra comfort.</p>
+                <p class="price">₹4,000 / night</p>
+            </div>
+
+        </div>
+    </div>
+
+</section>
+
+
+<!-- BOOKING -->
+
+<section id="booking" class="section">
+
+    <div class="card">
+
+        <h2>Book a Room</h2>
+
+        <form id="bookingForm">
+
+            <label>Customer Name</label>
+            <input id="bookName"
+                   type="text"
+                   placeholder="Enter customer name"
+                   required>
+
+            <label>Phone Number</label>
+            <input id="bookPhone"
+                   type="tel"
+                   placeholder="Enter phone number"
+                   required>
+
+            <label>Email</label>
+            <input id="bookEmail"
+                   type="email"
+                   placeholder="Enter email">
+
+            <label>Check-in</label>
+            <input id="checkIn"
+                   type="date"
+                   required>
+
+            <label>Check-out</label>
+            <input id="checkOut"
+                   type="date"
+                   required>
+
+            <button class="action"
+                    type="button"
+                    onclick="checkAvailableRooms()">
+                Check Available Rooms
+            </button>
+
+            <div id="availableRoomsResult"></div>
+
+            <label>Selected Room Type</label>
+
+            <select id="bookRoom" required>
+                <option value="">Select room type</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Deluxe">Deluxe</option>
+            </select>
+
+            <button class="action"
+                    type="submit">
+                Book Room
+            </button>
+
+        </form>
+
+        <div id="bookingMessage"></div>
+
+    </div>
+
+</section>
+
+
+<!-- HISTORY -->
+
+<section id="history" class="section">
+
+    <div class="card">
+
+        <h2>Booking History</h2>
+
+        <input id="historyPhone"
+               type="tel"
+               placeholder="Enter phone number">
+
+        <button class="action"
+                onclick="loadHistory()">
+            Search Bookings
+        </button>
+
+        <div id="historyResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- CUSTOMER -->
+
+<section id="customer" class="section">
+
+    <div class="card">
+
+        <h2>Customer Registration</h2>
+
+        <form id="registerForm">
+
+            <input id="regName"
+                   placeholder="Full name"
+                   required>
+
+            <input id="regPhone"
+                   placeholder="Phone number"
+                   required>
+
+            <input id="regEmail"
+                   type="email"
+                   placeholder="Email"
+                   required>
+
+            <input id="regPassword"
+                   type="password"
+                   placeholder="Password"
+                   required>
+
+            <button class="action"
+                    type="submit">
+                Register
+            </button>
+
+        </form>
+
+        <div id="registerMessage"></div>
+
+    </div>
+
+
+    <div class="card">
+
+        <h2>Customer Login</h2>
+
+        <form id="customerLoginForm">
+
+            <input id="customerLoginEmail"
+                   type="email"
+                   placeholder="Email"
+                   required>
+
+            <input id="customerLoginPassword"
+                   type="password"
+                   placeholder="Password"
+                   required>
+
+            <button class="action"
+                    type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div id="customerLoginMessage"></div>
+
+        <button class="action"
+                onclick="loadCustomerBookings()">
+            My Bookings
+        </button>
+
+        <button class="action secondary"
+                onclick="customerLogout()">
+            Customer Logout
+        </button>
+
+        <div id="customerBookingsResult"></div>
+
+    </div>
+
+</section>
+
+
+<!-- STAFF LOGIN -->
+
+<section id="staff" class="section">
+
+    <div class="card">
+
+        <h2>Staff/Admin Login</h2>
+
+        <form id="staffLoginForm">
+
+            <label>Username</label>
+
+            <input id="staffUsername"
+                   type="text"
+                   placeholder="Username"
+                   required>
+
+            <label>Password</label>
+
+            <input id="staffPassword"
+                   type="password"
+                   placeholder="Password"
+                   required>
+
+            <button class="action"
+                    type="submit">
+                Login
+            </button>
+
+        </form>
+
+        <div id="staffLoginMessage"></div>
+
+    </div>
+
+</section>
+
+
+<!-- DASHBOARD -->
+
+<section id="dashboard" class="section">
+
+    <div class="card">
+
+        <h2>Staff/Admin Dashboard</h2>
+
+        <div id="dashboardMessage"></div>
+
+        <div class="stats">
+
+            <div class="stat-card">
+                <h3>Total Bookings</h3>
+                <p id="totalBookings">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Rooms</h3>
+                <p id="totalRooms">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Total Customers</h3>
+                <p id="totalCustomers">0</p>
+            </div>
+
+            <div class="stat-card">
+                <h3>Active Bookings</h3>
+                <p id="activeBookings">0</p>
+            </div>
+
+        </div>
+
+        <button class="action"
+                onclick="loadDashboard()">
+            Refresh Dashboard
+        </button>
+
+        <button class="action success"
+                onclick="exportBookings()">
+            Export CSV
+        </button>
+
+    </div>
+
+
+    <!-- BOOKING MANAGEMENT -->
+
+    <div class="card">
+
+        <h2>Manage Bookings</h2>
+
+        <button class="action"
+                onclick="loadBookings()">
+            Load Bookings
+        </button>
+
+        <div id="bookingManagement"></div>
+
+    </div>
+
+
+    <!-- ROOM MANAGEMENT -->
+
+    <div class="card">
+
+        <h2>Manage Rooms</h2>
+
+        <button class="action"
+                onclick="loadRoomsManagement()">
+            Load Rooms
+        </button>
+
+        <div id="roomsManagement"></div>
+
+        <h3>Add Room</h3>
+
+        <form id="addRoomForm">
+
+            <input id="newRoomNumber"
+                   placeholder="Room Number"
+                   required>
+
+            <select id="newRoomType" required>
+                <option value="">Room Type</option>
+                <option value="Single">Single</option>
+                <option value="Double">Double</option>
+                <option value="Deluxe">Deluxe</option>
+            </select>
+
+            <input id="newRoomPrice"
+                   type="number"
+                   min="1"
+                   placeholder="Price"
+                   required>
+
+            <button class="action"
+                    type="submit">
+                Add Room
+            </button>
+
+        </form>
+
+        <div id="addRoomMessage"></div>
+
+    </div>
+
+
+    <!-- STAFF MANAGEMENT -->
+
+    <div class="card">
+
+        <h2>Manage Staff</h2>
+
+        <button class="action"
+                onclick="loadStaff()">
+            Load Staff
+        </button>
+
+        <div id="staffManagement"></div>
+
+        <h3>Add Staff</h3>
+
+        <form id="addStaffForm">
+
+            <input id="newStaffName"
+                   placeholder="Name"
+                   required>
+
+            <input id="newStaffPhone"
+                   placeholder="Phone">
+
+            <input id="newStaffUsername"
+                   placeholder="Username"
+                   required>
+
+            <input id="newStaffPassword"
+                   type="password"
+                   placeholder="Password"
+                   required>
+
+            <select id="newStaffRole">
+                <option value="staff">Staff</option>
+                <option value="admin">Admin</option>
+            </select>
+
+            <button class="action"
+                    type="submit">
+                Add Staff
+            </button>
+
+        </form>
+
+        <div id="addStaffMessage"></div>
+
+    </div>
+
+</section>
+
+</div>
+
+<footer>
+    Hotel Management System
+</footer>
+
+
+<script>
+
+// --------------------------------------------------
+// API
+// --------------------------------------------------
+
+const API = "http://127.0.0.1:5000/api";
+
+
+// --------------------------------------------------
+// API HELPER
+// --------------------------------------------------
+
+async function apiFetch(url, options = {}) {
+
+    const config = {
+        ...options,
+        credentials: "include",
+        headers: {
+            ...(options.headers || {})
+        }
+    };
+
+    if (options.body) {
+        config.headers["Content-Type"] = "application/json";
+    }
+
+    const response = await fetch(url, config);
+
+    const contentType =
+        response.headers.get("content-type") || "";
+
+    let data;
+
+    if (contentType.includes("application/json")) {
+        data = await response.json();
+    } else {
+        data = await response.text();
+    }
+
+    if (!response.ok) {
+
+        const message =
+            typeof data === "object"
+            ? data.message || data.error
+            : data;
+
+        throw new Error(message || "Request failed");
+    }
+
+    return data;
+}
+
+
+// --------------------------------------------------
+// NAVIGATION
+// --------------------------------------------------
+
+function showSection(sectionId) {
+
+    document.querySelectorAll(".section")
+        .forEach(section => {
+            section.classList.remove("active");
+        });
+
+    const section = document.getElementById(sectionId);
+
+    if (section) {
+        section.classList.add("active");
+    }
+}
+
+
+// --------------------------------------------------
+// MESSAGES
+// --------------------------------------------------
+
+function showMessage(elementId, message) {
+
+    const element = document.getElementById(elementId);
+
+    element.innerHTML = "";
+
+    const div = document.createElement("div");
+
+    div.className = "message";
+    div.textContent = message;
+
+    element.appendChild(div);
+}
+
+
+// --------------------------------------------------
+// AVAILABLE ROOMS
+// --------------------------------------------------
+
+async function checkAvailableRooms() {
+
+    const checkIn =
+        document.getElementById("checkIn").value;
+
+    const checkOut =
+        document.getElementById("checkOut").value;
+
+    const result =
+        document.getElementById("availableRoomsResult");
+
+    result.innerHTML = "";
+
+    if (!checkIn || !checkOut) {
+
+        showMessage(
+            "availableRoomsResult",
+            "Please select both dates."
+        );
+
+        return;
+    }
+
+    if (checkOut <= checkIn) {
+
+        showMessage(
+            "availableRoomsResult",
+            "Check-out must be after check-in."
+        );
+
+        return;
+    }
+
+    result.innerHTML =
+        "<div class='message'>Checking available rooms...</div>";
+
+    try {
+
+        const rooms = await apiFetch(
+            `${API}/available-rooms?check_in=${encodeURIComponent(checkIn)}&check_out=${encodeURIComponent(checkOut)}`
+        );
+
+        result.innerHTML = "";
+
+        if (!rooms.length) {
+
+            showMessage(
+                "availableRoomsResult",
+                "No rooms available for these dates."
+            );
+
+            return;
+        }
+
+        const grid = document.createElement("div");
+
+        grid.className = "room-grid";
+
+        rooms.forEach(room => {
+
+            const card = document.createElement("div");
+
+            card.className = "room-card";
+
+            card.innerHTML = `
+                <h3>Room ${escapeHTML(room.room_number)}</h3>
+                <p>Type: ${escapeHTML(room.type)}</p>
+                <p class="price">₹${escapeHTML(room.price)} / night</p>
+            `;
+
+            const button = document.createElement("button");
+
+            button.className = "action";
+            button.textContent = "Select Room";
+
+            button.onclick = () => {
+
+                document.getElementById("bookRoom").value =
+                    room.type;
+
+                showMessage(
+                    "bookingMessage",
+                    "Selected " + room.type +
+                    " room (Room " + room.room_number +
+                    "). Please complete the booking."
+                );
+            };
+
+            card.appendChild(button);
+
+            grid.appendChild(card);
+
+        });
+
+        result.appendChild(grid);
+
+    } catch (error) {
+
+        showMessage(
+            "availableRoomsResult",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// HTML ESCAPE
+// --------------------------------------------------
+
+function escapeHTML(value) {
+
+    return String(value ?? "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+}
+
+
+// --------------------------------------------------
+// BOOK ROOM
+// --------------------------------------------------
+
+document.getElementById("bookingForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const bookingMessage =
+        document.getElementById("bookingMessage");
+
+    bookingMessage.innerHTML = "";
+
+    const data = {
+
+        name:
+        document.getElementById("bookName").value.trim(),
+
+        phone:
+        document.getElementById("bookPhone").value.trim(),
+
+        email:
+        document.getElementById("bookEmail").value.trim(),
+
+        room_type:
+        document.getElementById("bookRoom").value,
+
+        check_in:
+        document.getElementById("checkIn").value,
+
+        check_out:
+        document.getElementById("checkOut").value
+
+    };
+
+    if (
+        !data.name ||
+        !data.phone ||
+        !data.room_type ||
+        !data.check_in ||
+        !data.check_out
+    ) {
+
+        showMessage(
+            "bookingMessage",
+            "Please fill all required details."
+        );
+
+        return;
+    }
+
+    if (data.check_out <= data.check_in) {
+
+        showMessage(
+            "bookingMessage",
+            "Check-out must be after check-in."
+        );
+
+        return;
+    }
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/bookings`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "bookingMessage",
+            result.message +
+            " Booking ID: " + result.booking_id +
+            ". Room Number: " + result.room_number
+        );
+
+        document.getElementById("bookingForm").reset();
+
+        document.getElementById("availableRoomsResult").innerHTML = "";
+
+    } catch (error) {
+
+        showMessage(
+            "bookingMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// BOOKING HISTORY
+// --------------------------------------------------
+
+async function loadHistory() {
+
+    const phone =
+        document.getElementById("historyPhone").value.trim();
+
+    if (!phone) {
+
+        showMessage(
+            "historyResult",
+            "Enter phone number."
+        );
+
+        return;
+    }
+
+    try {
+
+        const bookings = await apiFetch(
+            `${API}/history?phone=${encodeURIComponent(phone)}`
+        );
+
+        if (!bookings.length) {
+
+            showMessage(
+                "historyResult",
+                "No bookings found."
+            );
+
+            return;
+        }
+
+        let html = `
+        <div class="table-wrap">
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Room</th>
+            <th>Type</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+        </tr>
+        `;
+
+        bookings.forEach(b => {
+
+            html += `
+            <tr>
+                <td>${escapeHTML(b.id)}</td>
+                <td>${escapeHTML(b.name)}</td>
+                <td>${escapeHTML(b.room_number || "-")}</td>
+                <td>${escapeHTML(b.room_type)}</td>
+                <td>${escapeHTML(b.check_in)}</td>
+                <td>${escapeHTML(b.check_out)}</td>
+                <td>${escapeHTML(b.status)}</td>
+            </tr>
+            `;
+
+        });
+
+        html += "</table></div>";
+
+        document.getElementById("historyResult")
+            .innerHTML = html;
+
+    } catch (error) {
+
+        showMessage(
+            "historyResult",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// CUSTOMER REGISTRATION
+// --------------------------------------------------
+
+document.getElementById("registerForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const data = {
+
+        name:
+        document.getElementById("regName").value.trim(),
+
+        phone:
+        document.getElementById("regPhone").value.trim(),
+
+        email:
+        document.getElementById("regEmail").value.trim(),
+
+        password:
+        document.getElementById("regPassword").value
+
+    };
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/customer/register`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "registerMessage",
+            result.message
+        );
+
+        document.getElementById("registerForm").reset();
+
+    } catch (error) {
+
+        showMessage(
+            "registerMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// CUSTOMER LOGIN
+// --------------------------------------------------
+
+document.getElementById("customerLoginForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const data = {
+
+        email:
+        document.getElementById("customerLoginEmail").value.trim(),
+
+        password:
+        document.getElementById("customerLoginPassword").value
+
+    };
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/customer/login`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "customerLoginMessage",
+            "Welcome " + result.customer.name
+        );
+
+    } catch (error) {
+
+        showMessage(
+            "customerLoginMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// CUSTOMER BOOKINGS
+// --------------------------------------------------
+
+async function loadCustomerBookings() {
+
+    try {
+
+        const bookings = await apiFetch(
+            `${API}/customer/bookings`
+        );
+
+        if (!bookings.length) {
+
+            showMessage(
+                "customerBookingsResult",
+                "No bookings found."
+            );
+
+            return;
+        }
+
+        let html = `
+        <div class="table-wrap">
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Room</th>
+            <th>Type</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+        </tr>
+        `;
+
+        bookings.forEach(b => {
+
+            html += `
+            <tr>
+                <td>${escapeHTML(b.id)}</td>
+                <td>${escapeHTML(b.room_number || "-")}</td>
+                <td>${escapeHTML(b.room_type)}</td>
+                <td>${escapeHTML(b.check_in)}</td>
+                <td>${escapeHTML(b.check_out)}</td>
+                <td>${escapeHTML(b.status)}</td>
+            </tr>
+            `;
+
+        });
+
+        html += "</table></div>";
+
+        document.getElementById("customerBookingsResult")
+            .innerHTML = html;
+
+    } catch (error) {
+
+        showMessage(
+            "customerBookingsResult",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// CUSTOMER LOGOUT
+// --------------------------------------------------
+
+async function customerLogout() {
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/customer/logout`,
+            { method: "POST" }
+        );
+
+        showMessage(
+            "customerLoginMessage",
+            result.message
+        );
+
+    } catch (error) {
+
+        showMessage(
+            "customerLoginMessage",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// STAFF LOGIN
+// --------------------------------------------------
+
+document.getElementById("staffLoginForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const data = {
+
+        username:
+        document.getElementById("staffUsername").value.trim(),
+
+        password:
+        document.getElementById("staffPassword").value
+
+    };
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/staff/login`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "staffLoginMessage",
+            "Login successful. Welcome " + result.staff.name
+        );
+
+        showSection("dashboard");
+
+        await loadDashboard();
+
+    } catch (error) {
+
+        showMessage(
+            "staffLoginMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// DASHBOARD
+// --------------------------------------------------
+
+async function loadDashboard() {
+
+    try {
+
+        const stats = await apiFetch(
+            `${API}/stats`
+        );
+
+        document.getElementById("totalBookings")
+            .textContent = stats.total_bookings;
+
+        document.getElementById("totalRooms")
+            .textContent = stats.total_rooms;
+
+        document.getElementById("totalCustomers")
+            .textContent = stats.total_customers;
+
+        document.getElementById("activeBookings")
+            .textContent = stats.active_bookings;
+
+        showMessage(
+            "dashboardMessage",
+            "Dashboard loaded successfully."
+        );
+
+    } catch (error) {
+
+        showMessage(
+            "dashboardMessage",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// ALL BOOKINGS
+// --------------------------------------------------
+
+async function loadBookings() {
+
+    try {
+
+        const bookings = await apiFetch(
+            `${API}/bookings`
+        );
+
+        if (!bookings.length) {
+
+            showMessage(
+                "bookingManagement",
+                "No bookings available."
+            );
+
+            return;
+        }
+
+        let html = `
+        <div class="table-wrap">
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Room</th>
+            <th>Type</th>
+            <th>Check-in</th>
+            <th>Check-out</th>
+            <th>Status</th>
+            <th>Update</th>
+            <th>Delete</th>
+        </tr>
+        `;
+
+        bookings.forEach(b => {
+
+            html += `
+            <tr>
+                <td>${escapeHTML(b.id)}</td>
+                <td>${escapeHTML(b.name)}</td>
+                <td>${escapeHTML(b.phone)}</td>
+                <td>${escapeHTML(b.room_number || "-")}</td>
+                <td>${escapeHTML(b.room_type)}</td>
+                <td>${escapeHTML(b.check_in)}</td>
+                <td>${escapeHTML(b.check_out)}</td>
+
+                <td>
+                    <select id="status${b.id}">
+                        <option ${b.status === "Booked" ? "selected" : ""}>Booked</option>
+                        <option ${b.status === "Confirmed" ? "selected" : ""}>Confirmed</option>
+                        <option ${b.status === "Checked In" ? "selected" : ""}>Checked In</option>
+                        <option ${b.status === "Checked Out" ? "selected" : ""}>Checked Out</option>
+                        <option ${b.status === "Cancelled" ? "selected" : ""}>Cancelled</option>
+                    </select>
+                </td>
+
+                <td>
+                    <button class="action"
+                        onclick="updateBooking(${b.id})">
+                        Update
+                    </button>
+                </td>
+
+                <td>
+                    <button class="action danger"
+                        onclick="deleteBooking(${b.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            `;
+
+        });
+
+        html += "</table></div>";
+
+        document.getElementById("bookingManagement")
+            .innerHTML = html;
+
+    } catch (error) {
+
+        showMessage(
+            "bookingManagement",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// UPDATE BOOKING
+// --------------------------------------------------
+
+async function updateBooking(id) {
+
+    const status =
+        document.getElementById("status" + id).value;
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/bookings/${id}`,
+            {
+                method: "PUT",
+                body: JSON.stringify({ status })
+            }
+        );
+
+        alert(result.message);
+
+        loadBookings();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+// --------------------------------------------------
+// DELETE BOOKING
+// --------------------------------------------------
+
+async function deleteBooking(id) {
+
+    if (!confirm("Delete this booking?")) {
+        return;
+    }
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/bookings/${id}`,
+            { method: "DELETE" }
+        );
+
+        alert(result.message);
+
+        loadBookings();
+        loadDashboard();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+// --------------------------------------------------
+// ROOM MANAGEMENT
+// --------------------------------------------------
+
+async function loadRoomsManagement() {
+
+    try {
+
+        const rooms = await apiFetch(
+            `${API}/rooms`
+        );
+
+        let html = `
+        <div class="table-wrap">
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Room Number</th>
+            <th>Type</th>
+            <th>Price</th>
+            <th>Status</th>
+            <th>Delete</th>
+        </tr>
+        `;
+
+        rooms.forEach(room => {
+
+            html += `
+            <tr>
+                <td>${escapeHTML(room.id)}</td>
+                <td>${escapeHTML(room.room_number)}</td>
+                <td>${escapeHTML(room.type)}</td>
+                <td>₹${escapeHTML(room.price)}</td>
+                <td>${escapeHTML(room.status)}</td>
+                <td>
+                    <button class="action danger"
+                        onclick="deleteRoom(${room.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            `;
+
+        });
+
+        html += "</table></div>";
+
+        document.getElementById("roomsManagement")
+            .innerHTML = html;
+
+    } catch (error) {
+
+        showMessage(
+            "roomsManagement",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// ADD ROOM
+// --------------------------------------------------
+
+document.getElementById("addRoomForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const data = {
+
+        room_number:
+        document.getElementById("newRoomNumber").value.trim(),
+
+        type:
+        document.getElementById("newRoomType").value,
+
+        price:
+        document.getElementById("newRoomPrice").value
+
+    };
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/rooms`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "addRoomMessage",
+            result.message
+        );
+
+        this.reset();
+
+        loadRoomsManagement();
+        loadDashboard();
+
+    } catch (error) {
+
+        showMessage(
+            "addRoomMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// DELETE ROOM
+// --------------------------------------------------
+
+async function deleteRoom(id) {
+
+    if (!confirm("Delete this room?")) {
+        return;
+    }
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/rooms/${id}`,
+            { method: "DELETE" }
+        );
+
+        alert(result.message);
+
+        loadRoomsManagement();
+        loadDashboard();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+// --------------------------------------------------
+// STAFF MANAGEMENT
+// --------------------------------------------------
+
+async function loadStaff() {
+
+    try {
+
+        const staff = await apiFetch(
+            `${API}/staff`
+        );
+
+        let html = `
+        <div class="table-wrap">
+        <table>
+        <tr>
+            <th>ID</th>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Username</th>
+            <th>Role</th>
+            <th>Delete</th>
+        </tr>
+        `;
+
+        staff.forEach(s => {
+
+            html += `
+            <tr>
+                <td>${escapeHTML(s.id)}</td>
+                <td>${escapeHTML(s.name)}</td>
+                <td>${escapeHTML(s.phone)}</td>
+                <td>${escapeHTML(s.username)}</td>
+                <td>${escapeHTML(s.role)}</td>
+                <td>
+                    <button class="action danger"
+                        onclick="deleteStaff(${s.id})">
+                        Delete
+                    </button>
+                </td>
+            </tr>
+            `;
+
+        });
+
+        html += "</table></div>";
+
+        document.getElementById("staffManagement")
+            .innerHTML = html;
+
+    } catch (error) {
+
+        showMessage(
+            "staffManagement",
+            error.message
+        );
+    }
+}
+
+
+// --------------------------------------------------
+// ADD STAFF
+// --------------------------------------------------
+
+document.getElementById("addStaffForm")
+.addEventListener("submit", async function(event) {
+
+    event.preventDefault();
+
+    const data = {
+
+        name:
+        document.getElementById("newStaffName").value.trim(),
+
+        phone:
+        document.getElementById("newStaffPhone").value.trim(),
+
+        username:
+        document.getElementById("newStaffUsername").value.trim(),
+
+        password:
+        document.getElementById("newStaffPassword").value,
+
+        role:
+        document.getElementById("newStaffRole").value
+
+    };
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/staff`,
+            {
+                method: "POST",
+                body: JSON.stringify(data)
+            }
+        );
+
+        showMessage(
+            "addStaffMessage",
+            result.message
+        );
+
+        this.reset();
+
+        loadStaff();
+
+    } catch (error) {
+
+        showMessage(
+            "addStaffMessage",
+            error.message
+        );
+    }
+
+});
+
+
+// --------------------------------------------------
+// DELETE STAFF
+// --------------------------------------------------
+
+async function deleteStaff(id) {
+
+    if (!confirm("Delete this staff member?")) {
+        return;
+    }
+
+    try {
+
+        const result = await apiFetch(
+            `${API}/staff/${id}`,
+            { method: "DELETE" }
+        );
+
+        alert(result.message);
+
+        loadStaff();
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+// --------------------------------------------------
+// EXPORT
+// --------------------------------------------------
+
+async function exportBookings() {
+
+    try {
+
+        const response = await fetch(
+            `${API}/export`,
+            {
+                credentials: "include"
+            }
+        );
+
+        if (!response.ok) {
+
+            const data = await response.json();
+
+            throw new Error(
+                data.message || "Export failed"
+            );
+        }
+
+        const blob = await response.blob();
+
+        const url = URL.createObjectURL(blob);
+
+        const link = document.createElement("a");
+
+        link.href = url;
+        link.download = "hotel_bookings.csv";
+
+        document.body.appendChild(link);
+
+        link.click();
+
+        link.remove();
+
+        URL.revokeObjectURL(url);
+
+    } catch (error) {
+
+        alert(error.message);
+    }
+}
+
+
+// --------------------------------------------------
+// LOGOUT
+// --------------------------------------------------
+
+async function logout() {
+
+    try {
+
+        await apiFetch(
+            `${API}/staff/logout`,
+            { method: "POST" }
+        );
+
+    } catch (error) {
+
+        console.log(error.message);
+    }
+
+    showSection("home");
+
+}
+
+
+// --------------------------------------------------
+// DATE MINIMUM
+// --------------------------------------------------
+
+const today = new Date();
+
+const localToday = new Date(
+    today.getTime() - today.getTimezoneOffset() * 60000
+).toISOString().split("T")[0];
+
+document.getElementById("checkIn").min = localToday;
+document.getElementById("checkOut").min = localToday;
+
+document.getElementById("checkIn")
+.addEventListener("change", function() {
+
+    document.getElementById("checkOut").min =
+        this.value || localToday;
+
+});
+
+</script>
+
+</body>
+</html>
